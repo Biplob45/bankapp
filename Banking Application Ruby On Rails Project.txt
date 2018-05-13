@@ -1,0 +1,8 @@
+Banking Application Ruby On Rails Project
+
+1.At first create the project by run this command in Command prompt with ruby on rails:
+=>cd C:\Users\user\RubymineProjects
+=>rails new bankapp
+=>cd bankapp
+
+
