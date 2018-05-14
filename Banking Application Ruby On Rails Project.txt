@@ -6,3 +6,19 @@ Banking Application Ruby On Rails Project
 =>cd bankapp
 
 
+Now Creating a Rails model:
+rails generate model ModelName attribute:type
+model names are singular.
+
+=>rails g model Client first_name:string last_name:string middle_name:string client_number:string
+=>rake db:migrate
+
+
+Again Creating a Rails model:
+=>rails g model BankAccount client:references balance:decimal account_number:string
+=>rake db:migrate
+
+
+Again Creating a Rails model:
+=>rails g model AccountTransaction amount:decimal transaction_type:string bank_account:references
+=>rake db:migrate
