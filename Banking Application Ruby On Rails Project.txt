@@ -22,3 +22,44 @@ Again Creating a Rails model:
 Again Creating a Rails model:
 =>rails g model AccountTransaction amount:decimal transaction_type:string bank_account:references
 =>rake db:migrate
+
+
+
+2.Now added this code in "GEMFILE":
+https://rubygems.org/gems/bootstrap-sass/versions/3.3.7
+gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
+
+We Don't Use this gem file so remove the turbolinks From views>layouts.application.html.erb:
+gem 'turbolinks', '~> 5'
+
+
+https://rubygems.org/gems/haml/versions/5.0.4
+gem 'haml', '~> 5.0', '>= 5.0.4'
+
+
+Now run this command in cmd:
+=>bundle
+
+
+
+Added this code in models>client.rb:
+[client must be give his name and the client_number must be unique.Also before saving database the change the name in uppercase]
+class Client < ApplicationRecord
+	validates :first_name, presence: true
+	validates :last_name, presence: true
+	validates :middle_name, presence: true
+	validates :client_number, presence: true, uniqueness: true
+
+	before_save :format_name
+
+	def format_name
+		self.first_name  = self.first_name.upcase
+		self.last_name   = self.last_name.upcase
+		self.middle_name = self.middle_name.upcase
+	end
+
+	def to_s
+		"#{last_name}, #{first_name} #{middle_name}"
+	end 
+
+end
