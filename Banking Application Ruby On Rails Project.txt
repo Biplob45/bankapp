@@ -141,7 +141,46 @@ validates :transaction_number, presence: true, uniqueness: true
 
 
 
+3.Remove from app>assets>javascripts>application.js:
+//= require turbolinks
+//= require_tree .
+
+and also added this line:
+//= require bootstrap
 
 
 
+and also change the name from app>assets>stylesheets>application.css to application.scss and added this code:
 
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+
+Now check:
+=>rails s
+
+http://localhost:3000/    successfully runned....
+
+
+Now set the routes in config>routes.rb:
+root to: "pages#index" 
+
+
+Now Creating a Rails controller:
+rails generate controller ControllerName.
+controller names is plural.
+=>rails g controller pages
+
+
+
+added this code in controllers>pages_controller.rb:
+def index
+end
+
+
+also added this "index.html.haml" file in views>pages and added this code:
+%h1
+	My Bank
+
+	
+http://localhost:3000/    successfully runned....
