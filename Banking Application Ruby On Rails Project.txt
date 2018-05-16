@@ -95,3 +95,53 @@ Also Add This line in models>client.rb:
 [client can have many bank account]
 
 	has_many :bank_accounts
+
+	
+	
+	
+	
+	
+Added this code in models>account_transaction.rb:
+
+class AccountTransaction < ApplicationRecord
+  belongs_to :bank_account
+
+  TRANSACTION_TYPES = ["withdraw", "deposit"]
+
+  validates :bank_account, presence: true
+  validates :amount, presence:true, numericality: true
+  validates :transaction_type, presence: true, inclusion: { in: TRANSACTION_TYPES}
+end
+
+
+
+We forgot to added the transaction_number in account_transactions table when created model:   
+t.string "transaction_number"
+For this reason,
+create a migration file run this line in command prompt:
+=>rails g migration add_transaction_number_to_account_transactions transaction_number:string
+=>rake db:migrate
+
+
+
+After added transaction_number in account_transactions table now added this code in account_transactions.rb:
+
+validates :transaction_number, presence: true, uniqueness: true
+
+  before_validation :load_defaults
+
+  def load_defaults
+  	#if a transaction occured assigned a transaction number...
+  	if self.new_record?
+  		self.transaction_number = SecureRandom.uuid
+  end
+
+
+
+
+
+
+
+
+
+
