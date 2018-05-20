@@ -134,6 +134,7 @@ validates :transaction_number, presence: true, uniqueness: true
   	#if a transaction occured assigned a transaction number...
   	if self.new_record?
   		self.transaction_number = SecureRandom.uuid
+	end
   end
 
 
@@ -226,3 +227,124 @@ module ApplicationHelper
 end
 
 http://localhost:3000/    successfully runned....
+
+
+
+5.Added code in pages>index.html.haml  for create a link_to:
+
+.row
+	.col-md-12
+	= link_to bank_accounts_path do 
+		Bank Accounts
+		
+		
+If we runned now http://localhost:3000/  
+this error occured  :
+"  NameError in Pages#index
+Showing C:/Users/user/RubymineProjects/bankapp/app/views/pages/index.html.haml where line #13 raised:
+
+undefined local variable or method `bank_accounts_path' for #<#<Class:0x47d1e90>:0x891f618>  " 
+
+
+
+SO now we go to routing file again config>routes.rb:
+
+resources :bank_accounts, only: [:index, :show]
+
+
+Now Creating a Rails controller:
+rails generate controller ControllerName.
+controller names is plural.
+=>rails g controller bank_accounts
+
+
+added this code in controllers>bank_accounts_controller.rb:
+
+class BankAccountsController < ApplicationController
+	def index
+		@bank_accounts = BankAccount.all
+	end
+
+	def show
+		@bank_account = BankAccount.find(params[:id])
+	end
+end
+
+
+
+Now in views>bank_accounts created two html file:
+1.index.html.haml
+2.show.html.haml
+
+Haml have a rules:
+that we can't use any tab in haml code.Only use space.
+If we used tab this types of error occur:
+"  Haml::SyntaxError in BankAccounts#index
+Showing C:/Users/user/RubymineProjects/bankapp/app/views/bank_accounts/index.html.haml where line #8 raised:
+
+Inconsistent indentation: "\t  " used for indentation, but the rest of the document was indented using 2 spaces.   "
+
+
+Added code in views>bank_accounts>index.html.haml:
+
+%h1
+  Bank Accounts
+
+%table.table.table-bordered
+  %thead
+    %tr
+      %th Account Number
+      %th Balance
+      %th Actions
+  %tbody
+    - @bank_accounts.each do |bank_account|
+      %tr
+        %td #{bank_account.account_number}
+        %td #{number_to_currency(bank_account.balance, unit: "P")}
+        %td
+          = link_to bank_account_path(bank_account.id), class: "btn btn-primary" do
+            Show
+			
+			
+Now we have no bank account.Creating a bank_account using console.Before create bank_account creating a client:
+=>rails console
+=>Client.create!(first_name: "Md.Badiuzzaman", last_name: "Biplob", middle_name: "B", client_number: "133045")
+=>client = Client.last
+=>BankAccount.create!(client: client, account_number: "012319")
+=>exit
+
+
+
+Now added this code in views>bank_accounts>show.html.haml:
+
+%h1
+  Account Number: #{@bank_account.account_number}
+  %small
+    #{@bank_account.client}
+
+%table.table.table-bordered
+  %thead
+    %tr
+      %th Date of Transaction
+      %th Transaction Type
+      %th Amount
+  %tbody
+    - @bank_account.account_transactions.each do |t|
+      %tr
+        %td #{t.created_at}
+        %td #{t.transaction_type}
+        %td #{number_to_currency(t.amount, unit: "P")}
+
+
+
+
+
+
+Also Add This line in models>bank_account.rb:
+[bank_account can have many account_transactions]
+
+	has_many :account_transactions
+	
+	
+	
+	

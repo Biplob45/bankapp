@@ -14,6 +14,7 @@ class AccountTransaction < ApplicationRecord
   	#if a transaction occured assigned a transaction number...
   	if self.new_record?
   		self.transaction_number = SecureRandom.uuid
+    end
   end
 
 end
